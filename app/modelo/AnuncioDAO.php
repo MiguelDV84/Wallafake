@@ -150,20 +150,24 @@ class AnuncioDAO
         $stmt->bind_param('issi', $precio, $titulo, $descripcion, $idUsuario);
         $stmt->execute();
 
-        $idAnuncio = $this->conn->insert_id;
-
-        if (!empty($file_name)) {
-            foreach ($file_name as $foto) {
-                $query = "INSERT INTO fotografias (id_anuncio, foto, principal) VALUES (?, ?, ?)";
-                if (!$stmt = $this->conn->prepare($query)) {
-                    die("Error al ejecutar la QUERY" . $this->conn->error);
-                }
-
-                $principal = 0;
-                $stmt->bind_param('iss', $idAnuncio, $foto, $principal);
-                $stmt->execute();
-            }
-        }
+       
         return $stmt->insert_id;
+    }
+    function editarAnuncio(Anuncio $a)
+    {
+        $query = "UPDATE anuncios SET precio = ?, titulo = ?, descripcion = ? WHERE id= ?";
+        if (!$stmt = $this->conn->prepare($query)) {
+            die("Error al ejecutar la QUERY" . $this->conn->error);
+        }
+        $id = $a->getId();
+        $precio = $a->getPrecio();
+        $titulo = $a->getTitulo();
+        $descripcion = $a->getDescripcion();
+
+        $stmt->bind_param('issi', $precio, $titulo, $descripcion, $id);
+        $stmt->execute();
+
+       
+        
     }
 }

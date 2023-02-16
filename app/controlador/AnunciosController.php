@@ -134,8 +134,9 @@ class AnunciosController
     function editarAnuncio()
     {
 
+
         //Obtenemos el id del anuncio
-        $idAnuncio = $_GET['idAnuncio'];
+        $idAnuncio = filter_var($_GET['idAnuncio'], FILTER_SANITIZE_NUMBER_INT);
 
         //Instanciamos un anuncioDAO
         $anuncioDAO = new AnuncioDAO(ConexionBD::conectar());
@@ -146,5 +147,33 @@ class AnunciosController
         //Para mostrar el usuario que ha subido el producto
         $usuario = $anuncioDAO->getUsuarioAnuncio($idAnuncio);
         require 'app/vistas/editarAnuncio.php';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Obtener los datos del formulario
+            $titulo = $_POST['titulo'];
+            $precio = $_POST['precio'];
+            $descripcion = $_POST['descripcion'];
+            $file_name = [];
+            $principal = 0;
+            $anuncio->setPrecio($precio);
+            $anuncio->setTitulo($titulo);
+            $anuncio->setDescripcion($descripcion);
+            // Llama a la función para actualizar el anuncio
+            $anuncioDAO = new AnuncioDAO(ConexionBD::conectar());
+            $anuncioDAO->editarAnuncio($anuncio);
+            // Procesar las imágenes
+            foreach ($_FILES['foto']['tmp_name'] as $key => $tmp_name) {
+                $file_name[] = $_FILES['foto']['name'][$key];
+                $file_size = $_FILES['foto']['size'][$key];
+                $file_tmp = $_FILES['foto']['tmp_name'][$key];
+                $file_type = $_FILES['foto']['type'][$key];
+
+                $fotoDAO = new FotoDAO(ConexionBD::conectar());
+                $fotoDAO->insertarFoto($idAnuncio, $file_name[$key], $principal);
+                //Move the uploaded file to the desired location
+                move_uploaded_file($file_tmp, "web/img/" . $file_name[$key]);
+            }
+            header("location: misAnuncios.php");
+        }
     }
 }
