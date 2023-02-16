@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="web/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="web/css/templatemo-style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
-    <script src="web/js/previewImagen.js"></script>
+
     <style>
         #email_check {
             color: green;
@@ -93,7 +93,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link nav-link-1 active" style="max-width: 80%;" aria-current="page" href="index.php?action=inicio">Anuncios</a>
+                        <a class="nav-link nav-link-1" style="max-width: 80%;" aria-current="page" href="index.php?action=inicio">Anuncios</a>
                     </li>
                     <li class="nav-item">
                         <?php if (isset($_SESSION['idUsuario'])):  ?>
@@ -105,7 +105,7 @@
                 <?php endif; ?>
                 <?php if (isset($_SESSION['email'])) : ?>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-3" href="index.php?action=logout">Logout</a>
+                        <a class="nav-link nav-link-2" href="index.php?action=logout">Logout</a>
                     </li>
                 <?php else : ?>
                     <li class="nav-item">

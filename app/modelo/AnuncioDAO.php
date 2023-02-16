@@ -1,20 +1,17 @@
 <?php
 
-class AnuncioDAO
-{
+class AnuncioDAO {
 
     private $conn;
 
-    public function __construct($conn)
-    {
+    public function __construct($conn) {
         if (!$conn instanceof mysqli) { //Comprueba si $conn es un objeto de la clase mysqli
             return false;
         }
         $this->conn = $conn;
     }
 
-    public function getAnuncios()
-    {
+    public function getAnuncios() {
         $query = "SELECT * FROM anuncios ORDER BY fecha DESC";
         if (!$result = $this->conn->query($query)) {
             die("Error al ejecutar la QUERY" . $this->conn->error);
@@ -26,8 +23,7 @@ class AnuncioDAO
         return $array_anuncios;
     }
 
-    public function getImagenesAnuncios($idAnuncio)
-    {
+    public function getImagenesAnuncios($idAnuncio) {
         $sql = "SELECT * FROM fotografias WHERE id_anuncio = ?";
         if (!$stmt = $this->conn->prepare($sql)) {
             die("Error al preparar la SQL " . $this->conn->error);
@@ -47,8 +43,7 @@ class AnuncioDAO
         return $fotos;
     }
 
-    public function getAnunciosIdUsuario($idUser)
-    {
+    public function getAnunciosIdUsuario($idUser) {
         $query = "SELECT * FROM anuncios WHERE id_usuario = ?";
         if (!$stmt = $this->conn->prepare($query)) {
             die("Error al ejecutar la QUERY" . $this->conn->error);
@@ -68,12 +63,10 @@ class AnuncioDAO
             $anuncio->setFecha($row['fecha']);
             $anuncios[] = $anuncio;
         }
-
         return $anuncios;
     }
 
-    public function getAnunciosIdAnuncio($idAnuncio)
-    {
+    public function getAnunciosIdAnuncio($idAnuncio) {
         $query = "SELECT * FROM anuncios WHERE id = ?";
         if (!$stmt = $this->conn->prepare($query)) {
             die("Error al ejecutar la QUERY" . $this->conn->error);
@@ -88,8 +81,7 @@ class AnuncioDAO
         return $anuncio;
     }
 
-    public function getUsuarioAnuncio($idAnuncio)
-    {
+    public function getUsuarioAnuncio($idAnuncio) {
         $sql = "SELECT usuarios.*
             FROM anuncios
             INNER JOIN usuarios ON anuncios.id_usuario = usuarios.id
@@ -107,24 +99,24 @@ class AnuncioDAO
         return $usuarioAnuncio;
     }
 
-    function getFotoPrincipal($idAnuncio)
-    {
-        $query = "SELECT * FROM fotografias WHERE id_anuncio = ? and principal = 1";
-        if (!$stmt = $this->conn->prepare($query)) {
-            die("Error al ejecutar la QUERY" . $this->conn->error);
+    function getFotoPrincipal() {
+        $sql = "SELECT * FROM fotografias";
+        if (!$result = $this->conn->query($sql)) {
+            die("Error al ejecutar la SQL " . $this->conn->error);
         }
+        $array_mensajes = array();
+        while ($mensaje = $result->fetch_object('Foto')) {
+            $array_mensajes[] = $mensaje;
+        }
+        return $array_mensajes;
 
-        $stmt->bind_param('i', $idAnuncio);
-        $stmt->execute();
-
-        $result = $stmt->get_result();
-        $foto = $result->fetch_object('Foto');
-
-        return $foto;
+//        while ($result->fetch()) {
+//            $foto = new Foto($id, $id_anuncio, $foto, $principal);
+//            $array_fotos[] = $foto;
+//        }
     }
 
-    function paginacionAnuncios($inicio)
-    {
+    function paginacionAnuncios($inicio) {
         // Realizar la consulta a la base de datos
         $query = "SELECT * FROM anuncios ORDER BY fecha DESC LIMIT $inicio, 8";
         if (!$result = $this->conn->query($query)) {
@@ -140,8 +132,8 @@ class AnuncioDAO
         // Devolver el array de anuncios
         return $array_anuncios;
     }
-    function insertarAnuncio($precio, $titulo, $descripcion, $idUsuario)
-    {
+
+    function insertarAnuncio($precio, $titulo, $descripcion, $idUsuario) {
         $query = "INSERT INTO anuncios (precio, titulo, descripcion, id_usuario) VALUES (?, ?, ?, ?)";
         if (!$stmt = $this->conn->prepare($query)) {
             die("Error al ejecutar la QUERY" . $this->conn->error);
@@ -170,4 +162,5 @@ class AnuncioDAO
        
         
     }
+
 }
