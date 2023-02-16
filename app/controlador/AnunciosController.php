@@ -121,7 +121,7 @@ class AnunciosController
         $idUsuario = $_SESSION['idUsuario'];
         $anuncioDAO = new AnuncioDAO(ConexionBD::conectar());
 
-        $array_anuncios = $anuncioDAO->getAnunciosIdUsuario(11);
+        $array_anuncios = $anuncioDAO->getAnunciosIdUsuario($idUsuario);
 
         foreach ($array_anuncios as $anuncio) {
             $id_anuncio_foto = $anuncio->getId();
@@ -143,6 +143,8 @@ class AnunciosController
         //Obtenemos el anuncio por id
         $anuncio = $anuncioDAO->getAnunciosIdAnuncio($idAnuncio);
         //Obtenemos las imagenes de la tabla fotografias del anuncio de la descripción
+        $fotoDAO = new FotoDAO(ConexionBD::conectar());
+
         $fotos = $anuncioDAO->getImagenesAnuncios($idAnuncio);
         //Para mostrar el usuario que ha subido el producto
         $usuario = $anuncioDAO->getUsuarioAnuncio($idAnuncio);
@@ -159,7 +161,6 @@ class AnunciosController
             $anuncio->setTitulo($titulo);
             $anuncio->setDescripcion($descripcion);
             // Llama a la función para actualizar el anuncio
-            $anuncioDAO = new AnuncioDAO(ConexionBD::conectar());
             $anuncioDAO->editarAnuncio($anuncio);
             // Procesar las imágenes
             foreach ($_FILES['foto']['tmp_name'] as $key => $tmp_name) {
@@ -167,13 +168,14 @@ class AnunciosController
                 $file_size = $_FILES['foto']['size'][$key];
                 $file_tmp = $_FILES['foto']['tmp_name'][$key];
                 $file_type = $_FILES['foto']['type'][$key];
-
-                $fotoDAO = new FotoDAO(ConexionBD::conectar());
-                $fotoDAO->insertarFoto($idAnuncio, $file_name[$key], $principal);
+                foreach ($fotos as $foto) {
+                    $foto->setFoto($file_name[$key]);
+                    $fotoDAO->actualzarFoto($foto);
+                }
                 //Move the uploaded file to the desired location
                 move_uploaded_file($file_tmp, "web/img/" . $file_name[$key]);
             }
-            header("location: misAnuncios.php");
+            header("Location: index.php");
         }
     }
 }
