@@ -48,7 +48,7 @@ transform: skew(-10deg);       "
                     <img src="web/img/<?= $anuncio['imagen']; ?>" alt="Image" class="img-fluid">
                     <figcaption class="d-flex align-items-center justify-content-center">
                         <h2><?= $anuncio['titulo'] ?></h2>
-                        <a href="index.php?action=descripcion&idAnuncio=<?= $anuncio['id']; ?>">View morsssse</a>
+                        <a href="index.php?action=descripcion&idAnuncio=<?= $anuncio['id']; ?>">View more</a>
                     </figcaption>
                 </figure>
                 <div class="d-flex justify-content-between tm-text-gray">
