@@ -43,7 +43,8 @@ class AnunciosController
 
         // Obtener los siguientes 5 anuncios
         $array_Paginas = $anuncioDAO->paginacionAnuncios($inicio);
-
+        
+        $array_fotos = $anuncioDAO->getFotoPrincipal();
 
         require 'app/vistas/inicio.php';
     }

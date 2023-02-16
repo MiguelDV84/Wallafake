@@ -8,24 +8,24 @@
 </div>
 <?php if (isset($_SESSION['email'])): ?>
 
-<strong
-    style="
-    font-size: 35px;
-float: right;
-margin: 20px;
-margin-right: 150px;
-padding: 0 15px;
-padding-bottom: 12.5px;
-background: linear-gradient(to right, #00c6ff, #0072ff);
-color: white;
-text-shadow: 2px 2px #333;
-border: 1px solid rgba(255,255,255,0.5);
-border-top: 1px solid rgba(255,255,255,0.8);
-border-left: 1px solid rgba(255,255,255,0.8);
-border-radius: 20px;
-box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
-transform: skew(-10deg);       "
-    >¡Bienvenid@ <?= $_SESSION['email'] ?>!     <div style="background-image:url('web/img/<?= $_SESSION['foto'] ?>')" id='fotoUsuario'></div></strong>
+    <strong
+        style="
+        font-size: 35px;
+        float: right;
+        margin: 20px;
+        margin-right: 150px;
+        padding: 0 15px;
+        padding-bottom: 12.5px;
+        background: linear-gradient(to right, #00c6ff, #0072ff);
+        color: white;
+        text-shadow: 2px 2px #333;
+        border: 1px solid rgba(255,255,255,0.5);
+        border-top: 1px solid rgba(255,255,255,0.8);
+        border-left: 1px solid rgba(255,255,255,0.8);
+        border-radius: 20px;
+        box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+        transform: skew(-10deg);       "
+        >¡Bienvenid@ <?= $_SESSION['email'] ?>!     <div style="background-image:url('web/img/<?= $_SESSION['foto'] ?>')" id='fotoUsuario'></div></strong>
 
 <?php endif; ?>
 <div class="container-fluid tm-container-content tm-mt-60">
@@ -41,11 +41,17 @@ transform: skew(-10deg);       "
         <!-- Bucle escribe anuncios en lan vista -->
 
         <?php foreach ($array_Paginas as $anuncio) : ?>
-
+            
 
             <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
                 <figure class="effect-ming tm-video-item">
-                    <img src="web/img/<?= $anuncio['imagen']; ?>" alt="Image" class="img-fluid">
+                    <?php foreach ($array_fotos as $principal) :?>
+                    
+                    <?php if($principal->getPrincipal() == true && $anuncio['id'] == $principal->getId_anuncio()) : ?>
+                    <img src="web/img/<?= $principal->getFoto(); ; ?>" alt="Image" class="img-fluid">
+                    <?php else : ?>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
                     <figcaption class="d-flex align-items-center justify-content-center">
                         <h2><?= $anuncio['titulo'] ?></h2>
                         <a href="index.php?action=descripcion&idAnuncio=<?= $anuncio['id']; ?>">View more</a>
@@ -57,6 +63,7 @@ transform: skew(-10deg);       "
                 </div>
                 <p><?= $anuncio['descripcion'] ?></p>
             </div>
+        
         <?php endforeach; ?> <!--Fin del bucle -->
 
         <!--CONTENEDOR DE EJEMPLO-->
@@ -135,10 +142,20 @@ transform: skew(-10deg);       "
 
     <script src="web/js/plugins.js"></script>
     <script>
-        $(window).on("load", function() {
+        $(window).on("load", function () {
             $('body').addClass('loaded');
         });
-    </script>
-    </body>
 
-    </html>
+        var anunciosLink = document.getElementById("anuncios-link");
+
+        anunciosLink.addEventListener("mouseover", function () {
+            anunciosLink.classList.add("active");
+        });
+
+        anunciosLink.addEventListener("click", function () {
+            anunciosLink.classList.add("active");
+        });
+    </script>
+</body>
+
+</html>
