@@ -31,9 +31,18 @@ class FotoDAO{
         
         $stmt->bind_param('isi', $id_anuncio, $foto, $principal);
         $stmt->execute();
+    }
 
-        
+    public function actualzarFoto(Foto $f){
+        $query = "UPDATE fotografias SET id_anuncio = ?, foto = ?, principal = ? WHERE id_anuncio = ?";
+        if (!$stmt = $this->conn->prepare($query)) {
+            die("Error al ejecutar la QUERY" . $this->conn->error);
+        }
+        $idAnuncio = $f->getId_anuncio();
+        $foto = $f->getFoto();
+        $principal = $f->getPrincipal();
+
+        $stmt->bind_param('isi', $idAnuncio, $foto, $principal);
+        $stmt->execute();
     }
 }
-
-?>

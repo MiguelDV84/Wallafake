@@ -121,7 +121,7 @@ class AnunciosController
         $idUsuario = $_SESSION['idUsuario'];
         $anuncioDAO = new AnuncioDAO(ConexionBD::conectar());
 
-        $array_anuncios = $anuncioDAO->getAnunciosIdUsuario(11);
+        $array_anuncios = $anuncioDAO->getAnunciosIdUsuario($idUsuario);
 
         foreach ($array_anuncios as $anuncio) {
             $id_anuncio_foto = $anuncio->getId();
@@ -134,17 +134,48 @@ class AnunciosController
     function editarAnuncio()
     {
 
+
         //Obtenemos el id del anuncio
-        $idAnuncio = $_GET['idAnuncio'];
+        $idAnuncio = filter_var($_GET['idAnuncio'], FILTER_SANITIZE_NUMBER_INT);
 
         //Instanciamos un anuncioDAO
         $anuncioDAO = new AnuncioDAO(ConexionBD::conectar());
         //Obtenemos el anuncio por id
         $anuncio = $anuncioDAO->getAnunciosIdAnuncio($idAnuncio);
         //Obtenemos las imagenes de la tabla fotografias del anuncio de la descripción
+        $fotoDAO = new FotoDAO(ConexionBD::conectar());
+
         $fotos = $anuncioDAO->getImagenesAnuncios($idAnuncio);
         //Para mostrar el usuario que ha subido el producto
         $usuario = $anuncioDAO->getUsuarioAnuncio($idAnuncio);
         require 'app/vistas/editarAnuncio.php';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Obtener los datos del formulario
+            $titulo = $_POST['titulo'];
+            $precio = $_POST['precio'];
+            $descripcion = $_POST['descripcion'];
+            $file_name = [];
+            $principal = 0;
+            $anuncio->setPrecio($precio);
+            $anuncio->setTitulo($titulo);
+            $anuncio->setDescripcion($descripcion);
+            // Llama a la función para actualizar el anuncio
+            $anuncioDAO->editarAnuncio($anuncio);
+            // Procesar las imágenes
+            foreach ($_FILES['foto']['tmp_name'] as $key => $tmp_name) {
+                $file_name[] = $_FILES['foto']['name'][$key];
+                $file_size = $_FILES['foto']['size'][$key];
+                $file_tmp = $_FILES['foto']['tmp_name'][$key];
+                $file_type = $_FILES['foto']['type'][$key];
+                foreach ($fotos as $foto) {
+                    $foto->setFoto($file_name[$key]);
+                    $fotoDAO->actualzarFoto($foto);
+                }
+                //Move the uploaded file to the desired location
+                move_uploaded_file($file_tmp, "web/img/" . $file_name[$key]);
+            }
+            header("Location: index.php");
+        }
     }
 }

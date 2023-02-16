@@ -49,7 +49,7 @@ require 'app/vistas/plantilla.php';
                             </div>
                         </div>
                         -->
-                <form id="contact-form" action="index.php?action=subir_anuncio" method="POST" class="tm-contact-form mx-auto" enctype='multipart/form-data'>
+                <form id="contact-form" action="index.php?action=editar_anuncio&idAnuncio=<?= $_GET['idAnuncio'] ?>" method="POST" class="tm-contact-form mx-auto" enctype='multipart/form-data'>
                     <div class="form-group">
                         <h3 class="tm-text-gray-dark mb-3">Titulo</h3>
                         <input type="text" name="titulo" class="form-control rounded-0" value="<?= $anuncio->getTitulo(); ?>" required />
@@ -64,7 +64,8 @@ require 'app/vistas/plantilla.php';
                     </div>
                     <div class="form-group" id="contenedor">
                         <h3 class="tm-text-gray-dark mb-3">Sube fotos</h3>
-                        <input type="file" id="seleccionArchivos" name="foto[]" class="form-control rounded-0" onchange="previewImagen()" required multiple />
+                        
+                        <input type="file" id="seleccionArchivos" name="foto[]" class="form-control rounded-0" onchange="previewImagen()" multiple />
                     </div>
 
                     <div class="form-group tm-text-right">
