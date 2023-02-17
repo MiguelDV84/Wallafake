@@ -90,6 +90,9 @@ require 'app/vistas/plantilla.php';
                         <div class="form-group tm-text-right">
                             <a class="btn btn-primary" href="index.php?action=editar_anuncio&idAnuncio=<?= $_GET['idAnuncio'] ?>">Editar anuncio</a>
                         </div>
+                        <div class="form-group tm-text-right">
+                            <a class="btn btn-primary" href="index.php?action=borrar_anuncio&idAnuncio=<?= $_GET['idAnuncio'] ?>">Borrar Anuncio</a>
+                        </div>
                     <?php endif; ?>
 
                 </form>

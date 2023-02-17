@@ -43,7 +43,8 @@ class AnunciosController
 
         // Obtener los siguientes 5 anuncios
         $array_Paginas = $anuncioDAO->paginacionAnuncios($inicio);
-
+        
+        $array_fotos = $anuncioDAO->getFotoPrincipal();
 
         require 'app/vistas/inicio.php';
     }
@@ -82,6 +83,7 @@ class AnunciosController
 
 
 
+
     function subirAnuncio()
     {
         require 'app/vistas/subirAnuncio.php';
@@ -112,9 +114,12 @@ class AnunciosController
         }
     }
 
+
+
+    
+
     function misAnuncios()
     {
-
 
 
 
@@ -131,6 +136,27 @@ class AnunciosController
         require 'app/vistas/misAnuncios.php';
     }
 
+
+    function borrarAnuncio(){
+        //Obtenemos el id del anuncio
+        $idAnuncio = filter_var($_GET['idAnuncio'], FILTER_SANITIZE_NUMBER_INT);
+
+        //Instanciamos un anuncioDAO
+        $anuncioDAO = new AnuncioDAO(ConexionBD::conectar());
+        //Obtenemos el anuncio por id
+        $anuncioDAO->borrarAnuncio($idAnuncio);
+        $idUsuario = $_SESSION['idUsuario'];
+        $anuncioDAO = new AnuncioDAO(ConexionBD::conectar());
+
+        $array_anuncios = $anuncioDAO->getAnunciosIdUsuario($idUsuario);
+
+        foreach ($array_anuncios as $anuncio) {
+            $id_anuncio_foto = $anuncio->getId();
+
+            $array_fotos_principales[] = $anuncioDAO->getFotoPrincipal($id_anuncio_foto);
+        }
+        require 'app/vistas/misAnuncios.php';
+    } 
     function editarAnuncio()
     {
 
