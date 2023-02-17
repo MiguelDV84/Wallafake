@@ -158,9 +158,16 @@ class AnuncioDAO {
 
         $stmt->bind_param('issi', $precio, $titulo, $descripcion, $id);
         $stmt->execute();
+    }
 
-       
+    function borrarAnuncio($idAnuncio){
+        $query = "DELETE FROM anuncios WHERE id= ?";
+        if (!$stmt = $this->conn->prepare($query)) {
+            die("Error al ejecutar la QUERY" . $this->conn->error);
+        }
         
+        $stmt->bind_param('i',$idAnuncio);
+        $stmt->execute();
     }
 
 }

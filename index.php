@@ -23,7 +23,9 @@ $map = array(
     "comprobar_email" => array("controller" => "UsuariosController", "method" =>"comprobar_email", "publica" => true),
     "subir_anuncio" => array("controller" => "AnunciosController", "method" =>"subirAnuncio", "publica" => false),
     "mis_anuncios" => array("controller" => "AnunciosController", "method" =>"misAnuncios", "publica" => false),
-    "editar_anuncio" => array("controller" => "AnunciosController", "method" =>"editarAnuncio", "publica" => false)
+    "editar_anuncio" => array("controller" => "AnunciosController", "method" =>"editarAnuncio", "publica" => false),
+    "borrar_anuncio" => array("controller" => "AnunciosController", "method" =>"borrarAnuncio", "publica" => false)
+
 );
 
 /* PARSEO DE LA RUTA */
@@ -63,7 +65,7 @@ if (!isset($_SESSION['idUsuario']) && isset($_COOKIE['uid'])) {
 
 // Verificar si la acción es pública o no
 if (!$map[$action]['publica'] && !isset($_SESSION['idUsuario'])) {
-    // Si la acción no es pública y no existe una sesión de usuario, redirigir a la página de login
+    // Si la acción no es pública y no existe una sesión de usuario, redirigir al index
     header("Location: index.php");
     die();
 }
